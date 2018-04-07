@@ -4,7 +4,6 @@ package example.george.mina.themoviedb;
  * Created by minageorge on 4/7/18.
  */
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,7 +19,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
@@ -34,17 +33,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-/**
- * Created by Google       Company on 26/11/2017.
- */
-
 public class MainFragment extends Fragment {
-    ArrayList<MoviesItemModel>moviesItem=new ArrayList<>();
-    DetailItem [] detailItems;
-    String posterpath,title,vote,description,date,year;
-    RecyclerView recyclerView;
-    String parmarity ="";
-    StringRequest stringRequest;
+    private ArrayList<MoviesItemModel> moviesItem = new ArrayList<>();
+    private DetailItem[] detailItems;
+    private String posterpath, title, vote, description, date, year;
+    private RecyclerView recyclerView;
+    private String parmarity = "";
+    private StringRequest stringRequest;
+    private Toolbar toolbar;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -53,13 +50,19 @@ public class MainFragment extends Fragment {
         getdata();
 
     }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view=inflater.inflate(R.layout.main_fragment,container, false);
-        recyclerView = (RecyclerView) view.findViewById(R.id.recycl_movies);
-
+        View view = inflater.inflate(R.layout.fragment_main, container, false);
         return view;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        recyclerView = (RecyclerView) view.findViewById(R.id.main_recycler_id);
+        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_id);
     }
 
     @Override
@@ -73,19 +76,30 @@ public class MainFragment extends Fragment {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu, menu);
     }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_popular:
+                toolbar.setTitle(R.string.menu_popular_title);
+                break;
+            case R.id.action_rate:
+                toolbar.setTitle(R.string.menu_rate_title);
+                break;
+            case R.id.action_favo:
+                toolbar.setTitle(R.string.menu_fav_title);
+                break;
+            case R.id.action_span:
 
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            startActivity(new Intent(getActivity(), Setting.class));
+                break;
+            default:
+                toolbar.setTitle(R.string.app_name);
+                break;
         }
-
         return super.onOptionsItemSelected(item);
-
     }
 
-    public void getdata(){
+    public void getdata() {
         {
             String url = "http://api.themoviedb.org/3/movie/" + parmarity + "?api_key=7826714bce33155200adb2a059306594";
             stringRequest = new StringRequest(Request.Method.POST, url,
@@ -128,9 +142,9 @@ public class MainFragment extends Fragment {
                             }
 
                             recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-                            MoviesAdapter moviesAdapter = new MoviesAdapter(getActivity(), moviesItem, detailItems);
-                            recyclerView.setAdapter(moviesAdapter);
-                            moviesAdapter.notifyDataSetChanged();
+                            HomeMoviesAdapter homeMoviesAdapter = new HomeMoviesAdapter(getActivity(), moviesItem, detailItems);
+                            recyclerView.setAdapter(homeMoviesAdapter);
+                            homeMoviesAdapter.notifyDataSetChanged();
 
                         }
                     },

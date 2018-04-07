@@ -1,5 +1,11 @@
 package example.george.mina.themoviedb;
 
+import android.content.Context;
+
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
+
 /**
  * Created by minageorge on 4/7/18.
  */

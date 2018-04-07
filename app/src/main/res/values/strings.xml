@@ -9,4 +9,8 @@
     <string name="sort_defaultvalue">popular</string>
     <string name="title_activity_activit_detail_movbie">ActivitDetailMovbie</string>
     <string name="action_settings">Settings</string>
+    <string name="api_key" translatable="false">c23c8f8855a040042f0433b7696f9d65</string>
+    <string name="menu_fav_title">Favorites</string>
+    <string name="menu_rate_title">Top rated</string>
+    <string name="menu_popular_title">Most popular</string>
 </resources>

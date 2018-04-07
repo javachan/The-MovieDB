@@ -12,7 +12,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
@@ -22,27 +21,27 @@ import java.util.ArrayList;
  * Created by Google       Company on 26/11/2017.
  */
 
-public class MoviesAdapter extends RecyclerView.Adapter <MoviesAdapter.FilmItemRowHolder> {
+public class HomeMoviesAdapter extends RecyclerView.Adapter <HomeMoviesAdapter.FilmItemRowHolder> {
     ArrayList<MoviesItemModel> moviesItem;
     Context mcontext;
     DetailItem[] detailItems;
-    public MoviesAdapter(Context mcontext,ArrayList<MoviesItemModel> moviesItem,DetailItem[] detailItems) {
+    public HomeMoviesAdapter(Context mcontext, ArrayList<MoviesItemModel> moviesItem, DetailItem[] detailItems) {
         this.mcontext=mcontext;
         this.moviesItem=moviesItem;
         this.detailItems=detailItems;
     }
 
     @Override
-    public MoviesAdapter.FilmItemRowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HomeMoviesAdapter.FilmItemRowHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
-        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.movies_rpw, null);
-        MoviesAdapter.FilmItemRowHolder ALRH = new MoviesAdapter.FilmItemRowHolder(v);
+        v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, null);
+        HomeMoviesAdapter.FilmItemRowHolder ALRH = new HomeMoviesAdapter.FilmItemRowHolder(v);
         return ALRH;
 
     }
 
     @Override
-    public void onBindViewHolder(MoviesAdapter.FilmItemRowHolder holder, int position) {
+    public void onBindViewHolder(HomeMoviesAdapter.FilmItemRowHolder holder, int position) {
         Picasso.with(mcontext).load("http://image.tmdb.org/t/p/w342/"+moviesItem.get(position).getImgMovie()).into(holder.imageView);
 
 
