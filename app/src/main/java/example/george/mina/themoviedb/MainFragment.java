@@ -4,9 +4,7 @@ package example.george.mina.themoviedb;
  * Created by minageorge on 4/7/18.
  */
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
@@ -34,22 +32,18 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MainFragment extends Fragment {
-    private ArrayList<MoviesItemModel> moviesItem = new ArrayList<>();
-    private DetailItem[] detailItems;
-    private String posterpath, title, vote, description, date, year;
+    private HomeMoviesAdapter adapter;
+    private GridLayoutManager layoutManager;
     private RecyclerView recyclerView;
-    private String parmarity = "";
     private StringRequest stringRequest;
     private Toolbar toolbar;
-
+    private String currentQuery = "popular";
+    private String url;
 
     @Override
-    public void onStart() {
-        super.onStart();
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        parmarity = sharedPreferences.getString(getString(R.string.sort_key), "popular");
-        getdata();
-
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Nullable
@@ -64,12 +58,19 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.main_recycler_id);
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_id);
+        layoutManager = new GridLayoutManager(getActivity(), 2);
+        adapter = new HomeMoviesAdapter(getActivity());
+        adapter.setLayoutManager(layoutManager);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(adapter);
+        url = "http://api.themoviedb.org/3/movie/" +
+                currentQuery + "?api_key=" + getActivity().getString(R.string.api_key);
     }
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+    public void onStart() {
+        super.onStart();
+        getData();
     }
 
     @Override
@@ -83,15 +84,18 @@ public class MainFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_popular:
                 toolbar.setTitle(R.string.menu_popular_title);
+                currentQuery = "popular";
                 break;
             case R.id.action_rate:
                 toolbar.setTitle(R.string.menu_rate_title);
+                currentQuery = "top_rated";
                 break;
             case R.id.action_favo:
                 toolbar.setTitle(R.string.menu_fav_title);
                 break;
             case R.id.action_span:
-
+                switchLayout();
+                switchIcon(item);
                 break;
             default:
                 toolbar.setTitle(R.string.app_name);
@@ -100,52 +104,51 @@ public class MainFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void getdata() {
+    private void switchIcon(MenuItem item) {
+        if (layoutManager.getSpanCount() >= 2) {
+            item.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_view_headline_white_36dp));
+
+        } else {
+            item.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_view_module_white_36dp));
+            Log.d("dddd","1111");
+        }
+    }
+
+    private void switchLayout() {
+        int currentState = layoutManager.getSpanCount();
+        if (currentState == 1) {
+            layoutManager.setSpanCount(2); ///->>>
+        } else {
+            layoutManager.setSpanCount(1);
+            Log.d("dddd","1222");
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    public void getData() {
         {
-            String url = "http://api.themoviedb.org/3/movie/" + parmarity + "?api_key=7826714bce33155200adb2a059306594";
             stringRequest = new StringRequest(Request.Method.POST, url,
                     new Response.Listener<String>() {
                         @Override
                         public void onResponse(final String response) {
                             try {
-                                Log.i("data", response);
-
                                 JSONObject jsonObject = new JSONObject(response);
                                 JSONArray jsonArray = jsonObject.getJSONArray("results");
-                                detailItems = new DetailItem[jsonArray.length()];
-                                if (moviesItem != null) {
-                                    moviesItem.clear();
-                                }
+                                ArrayList<MovieDetails> movies = new ArrayList<>();
                                 for (int i = 0; i < jsonArray.length(); i++) {
-
+                                    MovieDetails md = new MovieDetails();
                                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
-                                    moviesItem.add(new MoviesItemModel(jsonObject1.getString("poster_path")));
-
-                                    title = jsonObject1.getString("original_title");
-
-                                    vote = jsonObject1.getString("vote_average");
-
-                                    description = jsonObject1.getString("overview");
-                                    date = jsonObject1.getString("release_date");
-
-                                    posterpath = jsonObject1.getString("poster_path");
-                                    Log.i("mhmod", title + vote + description + date + posterpath);
-                                    for (int j = 0; i < j; j++) {
-                                        year += date.charAt(j);
-                                    }
-                                    detailItems[i] = new DetailItem(posterpath, title, vote, description, date);
-
-
+                                    md.setMovieImag(jsonObject1.getString("poster_path"));
+                                    md.setMovieTitle(jsonObject1.getString("original_title"));
+                                    md.setMovieVote(jsonObject1.getString("vote_average"));
+                                    md.setMovieOverView(jsonObject1.getString("overview"));
+                                    md.setMovieDate(jsonObject1.getString("release_date"));
+                                    movies.add(md);
                                 }
-
+                                adapter.swapData(movies);
                             } catch (Exception e) {
 
                             }
-
-                            recyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 2));
-                            HomeMoviesAdapter homeMoviesAdapter = new HomeMoviesAdapter(getActivity(), moviesItem, detailItems);
-                            recyclerView.setAdapter(homeMoviesAdapter);
-                            homeMoviesAdapter.notifyDataSetChanged();
 
                         }
                     },
@@ -162,7 +165,6 @@ public class MainFragment extends Fragment {
                 }
             };
             Singleton.getInstance(getActivity()).addRequestQue(stringRequest);
-
         }
     }
 }

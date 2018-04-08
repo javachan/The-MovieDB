@@ -16,4 +16,9 @@
     <integer name="movie_detail_fab_elevation_in_dp">10</integer>
     <dimen name="movie_detail_content_overlay">0dp</dimen>
     <dimen name="item_movie_padding">2dp</dimen>
+    <dimen name="item_movie_rec_width">120dp</dimen>
+    <dimen name="item_movie_rec_height">100dp</dimen>
+    <dimen name="item_movie_rec_margin">10dp</dimen>
+    <dimen name="item_movie_rec_text_size">17sp</dimen>
+    <dimen name="item_movie_rec_text_margin">30dp</dimen>
 </resources>
