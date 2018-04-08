@@ -14,6 +14,7 @@ import android.view.View;
 public class ActivitDetailMovbie extends AppCompatActivity {
 
     @Override
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_activit_detail_movbie);
