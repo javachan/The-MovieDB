@@ -5,6 +5,7 @@ package example.george.mina.themoviedb;
  */
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +48,7 @@ public class HomeMoviesAdapter extends RecyclerView.Adapter<HomeMoviesAdapter.Vi
             holder.recLayout.setVisibility(View.VISIBLE);
             Picasso.with(mContext).load("http://image.tmdb.org/t/p/w342/" + moviesItem.get(position).getMovieImag()).into(holder.imageViewRec);
             holder.movieTitle.setText(moviesItem.get(position).getMovieTitle());
+            holder.movieTitle.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/Merriweather-BlackItalic.ttf"));
         }
 
     }

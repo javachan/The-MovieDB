@@ -10,6 +10,33 @@ class MovieDetails {
     private String movieDate;
     private String movieVote;
     private String movieOverView;
+    private String movieBackdrop;
+    private String movieVoteCount;
+    private String movieId;
+
+    public String getMovieBackdrop() {
+        return movieBackdrop;
+    }
+
+    public void setMovieBackdrop(String movieBackdrop) {
+        this.movieBackdrop = movieBackdrop;
+    }
+
+    public String getMovieVoteCount() {
+        return movieVoteCount;
+    }
+
+    public void setMovieVoteCount(String movieVoteCount) {
+        this.movieVoteCount = movieVoteCount;
+    }
+
+    public String getMovieId() {
+        return movieId;
+    }
+
+    public void setMovieId(String movieId) {
+        this.movieId = movieId;
+    }
 
     public String getMovieImag() {
         return movieImag;

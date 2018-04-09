@@ -37,8 +37,8 @@ public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
     private StringRequest stringRequest;
     private Toolbar toolbar;
-    private String currentQuery = "popular";
     private String url;
+    private String TAG = MainFragment.class.getSimpleName();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,8 @@ public class MainFragment extends Fragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_main, container, false);
         return view;
     }
@@ -63,8 +64,7 @@ public class MainFragment extends Fragment {
         adapter.setLayoutManager(layoutManager);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
-        url = "http://api.themoviedb.org/3/movie/" +
-                currentQuery + "?api_key=" + getActivity().getString(R.string.api_key);
+        url = "http://api.themoviedb.org/3/movie/popular?api_key=" + getActivity().getString(R.string.api_key);
     }
 
     @Override
@@ -84,11 +84,13 @@ public class MainFragment extends Fragment {
         switch (item.getItemId()) {
             case R.id.action_popular:
                 toolbar.setTitle(R.string.menu_popular_title);
-                currentQuery = "popular";
+                url = "http://api.themoviedb.org/3/movie/popular?api_key=" + getActivity().getString(R.string.api_key);
+                getData();
                 break;
             case R.id.action_rate:
                 toolbar.setTitle(R.string.menu_rate_title);
-                currentQuery = "top_rated";
+                url = "http://api.themoviedb.org/3/movie/top_rated?api_key=" + getActivity().getString(R.string.api_key);
+                getData();
                 break;
             case R.id.action_favo:
                 toolbar.setTitle(R.string.menu_fav_title);
@@ -110,7 +112,7 @@ public class MainFragment extends Fragment {
 
         } else {
             item.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_view_module_white_36dp));
-            Log.d("dddd","1111");
+            Log.d("dddd", "1111");
         }
     }
 
@@ -120,7 +122,7 @@ public class MainFragment extends Fragment {
             layoutManager.setSpanCount(2); ///->>>
         } else {
             layoutManager.setSpanCount(1);
-            Log.d("dddd","1222");
+            Log.d("dddd", "1222");
         }
         adapter.notifyDataSetChanged();
     }
@@ -147,9 +149,9 @@ public class MainFragment extends Fragment {
                                 }
                                 adapter.swapData(movies);
                             } catch (Exception e) {
+                                Log.d(TAG, e.getMessage());
 
                             }
-
                         }
                     },
                     new Response.ErrorListener() {
@@ -157,14 +159,8 @@ public class MainFragment extends Fragment {
                         public void onErrorResponse(VolleyError error) {
                             System.out.println(error.getMessage());
                         }
-                    }) {
-                @Override
-                protected Map<String, String> getParams() throws AuthFailureError {
-                    HashMap<String, String> map = new HashMap<>();
-                    return map;
-                }
-            };
-            Singleton.getInstance(getActivity()).addRequestQue(stringRequest);
+                    });
+            VolleySingleton.getInstance(getActivity()).addRequestQue(stringRequest);
         }
     }
 }
