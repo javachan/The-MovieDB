@@ -5,7 +5,9 @@ package example.george.mina.themoviedb;
  */
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Typeface;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -25,9 +27,12 @@ public class HomeMoviesAdapter extends RecyclerView.Adapter<HomeMoviesAdapter.Vi
     private ArrayList<MovieDetails> moviesItem = new ArrayList<>();
     private Context mContext;
     private GridLayoutManager gridLayoutManager = null;
-
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
     public HomeMoviesAdapter(Context context) {
         this.mContext = context;
+        this.preferences = mContext.getSharedPreferences("currentConfg",Context.MODE_PRIVATE);
+        this.editor = preferences.edit();
     }
 
     @Override
@@ -73,18 +78,16 @@ public class HomeMoviesAdapter extends RecyclerView.Adapter<HomeMoviesAdapter.Vi
             this.recLayout = (CardView)itemView.findViewById(R.id.rec_id);
             this.squLayout = (CardView) itemView.findViewById(R.id.squ_id);
 
-//            imageViewSqu.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent detail = new Intent(mcontext, ActivitDetailMovbie.class);
-//                    detail.putExtra("original_title", detailItems[getAdapterPosition()].getTitle());
-//                    detail.putExtra("overview", detailItems[getAdapterPosition()].getDescription());
-//                    detail.putExtra("release_date", detailItems[getAdapterPosition()].getDate());
-//                    detail.putExtra("vote_average", detailItems[getAdapterPosition()].getVote());
-//                    detail.putExtra("poster_path", detailItems[getAdapterPosition()].getPosterpath());
-//                    mcontext.startActivity(detail);
-//                }
-//            });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    editor.putInt("span",gridLayoutManager.getSpanCount()).commit();
+                   FragmentTransaction ft =((MainActivity)mContext).getSupportFragmentManager().beginTransaction();
+                   ft.addToBackStack(DetailsFragment.class.getSimpleName());
+                            ft.replace(R.id.fragment_content, new DetailsFragment(),DetailsFragment.class.getSimpleName())
+                            .commit();
+                }
+            });
 
         }
     }

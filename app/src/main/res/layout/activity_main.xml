@@ -3,11 +3,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+<FrameLayout
+    android:id="@+id/tool"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <include
+
+        layout="@layout/item_toolbar_details" />
 
     <include
-        android:id="@+id/tool"
-        layout="@layout/item_toolbar" />
 
+        layout="@layout/item_toolbar_main" />
+
+</FrameLayout>
     <FrameLayout
         android:id="@+id/fragment_content"
         android:layout_width="match_parent"

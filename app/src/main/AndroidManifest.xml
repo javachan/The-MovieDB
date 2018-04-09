@@ -18,14 +18,6 @@
             </intent-filter>
         </activity>
 
-        <activity
-            android:name=".ActivitDetailMovbie"
-            android:label="@string/title_activity_activit_detail_movbie"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MainActivity" />
-        </activity>
     </application>
 
 </manifest>

@@ -4,9 +4,13 @@ package example.george.mina.themoviedb;
  * Created by minageorge on 4/7/18.
  */
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -17,8 +21,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -28,22 +32,23 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+
 
 public class MainFragment extends Fragment {
     private HomeMoviesAdapter adapter;
     private GridLayoutManager layoutManager;
     private RecyclerView recyclerView;
     private StringRequest stringRequest;
-    private Toolbar toolbar;
+    private Toolbar toolbar, toolbar2;
     private String url;
     private String TAG = MainFragment.class.getSimpleName();
+    private SharedPreferences preferences;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        preferences = getActivity().getSharedPreferences("currentConfg", Context.MODE_PRIVATE);
     }
 
     @Nullable
@@ -59,7 +64,16 @@ public class MainFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         recyclerView = (RecyclerView) view.findViewById(R.id.main_recycler_id);
         toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_id);
-        layoutManager = new GridLayoutManager(getActivity(), 2);
+        toolbar2 = (Toolbar) getActivity().findViewById(R.id.toolbar_id2);
+        toolbar2.setVisibility(View.GONE);
+        toolbar.setVisibility(View.VISIBLE);
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_popular_title);
+        if (preferences.getInt("span", 0) == 1) {
+            layoutManager = new GridLayoutManager(getActivity(), 1);
+        } else {
+            layoutManager = new GridLayoutManager(getActivity(), 2);
+        }
         adapter = new HomeMoviesAdapter(getActivity());
         adapter.setLayoutManager(layoutManager);
         recyclerView.setLayoutManager(layoutManager);
@@ -76,7 +90,10 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(R.menu.menu, menu);
+        inflater.inflate(R.menu.menu_main, menu);
+        if (preferences.getInt("span", 0) == 1) {
+            switchIcon(menu.findItem(R.id.action_span));
+        }
     }
 
     @Override
@@ -112,7 +129,6 @@ public class MainFragment extends Fragment {
 
         } else {
             item.setIcon(getActivity().getResources().getDrawable(R.drawable.ic_view_module_white_36dp));
-            Log.d("dddd", "1111");
         }
     }
 
