@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorMovieItemRec">#E3F2FD</color>
     <color name="colorBlack">#000</color>
+    <color name="ColorNestedScroll">#E0E0E0</color>
 </resources>

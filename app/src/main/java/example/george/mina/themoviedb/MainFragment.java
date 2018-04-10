@@ -8,8 +8,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -21,7 +21,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -40,6 +39,7 @@ public class MainFragment extends Fragment {
     private RecyclerView recyclerView;
     private StringRequest stringRequest;
     private Toolbar toolbar, toolbar2;
+    private CollapsingToolbarLayout collapsingToolbarLayout;
     private String url;
     private String TAG = MainFragment.class.getSimpleName();
     private SharedPreferences preferences;
@@ -49,6 +49,7 @@ public class MainFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         preferences = getActivity().getSharedPreferences("currentConfg", Context.MODE_PRIVATE);
+        adapter = new HomeMoviesAdapter(getActivity());
     }
 
     @Nullable
@@ -62,9 +63,11 @@ public class MainFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        recyclerView = (RecyclerView) view.findViewById(R.id.main_recycler_id);
-        toolbar = (Toolbar) getActivity().findViewById(R.id.toolbar_id);
-        toolbar2 = (Toolbar) getActivity().findViewById(R.id.toolbar_id2);
+        recyclerView = view.findViewById(R.id.main_recycler_id);
+        toolbar = getActivity().findViewById(R.id.toolbar_id);
+        toolbar2 = getActivity().findViewById(R.id.toolbar_id2);
+        collapsingToolbarLayout = getActivity().findViewById(R.id.collapsing_toolbar);
+        collapsingToolbarLayout.setVisibility(View.GONE);
         toolbar2.setVisibility(View.GONE);
         toolbar.setVisibility(View.VISIBLE);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
@@ -74,7 +77,6 @@ public class MainFragment extends Fragment {
         } else {
             layoutManager = new GridLayoutManager(getActivity(), 2);
         }
-        adapter = new HomeMoviesAdapter(getActivity());
         adapter.setLayoutManager(layoutManager);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(adapter);
@@ -161,6 +163,9 @@ public class MainFragment extends Fragment {
                                     md.setMovieVote(jsonObject1.getString("vote_average"));
                                     md.setMovieOverView(jsonObject1.getString("overview"));
                                     md.setMovieDate(jsonObject1.getString("release_date"));
+                                    md.setMovieBackdrop(jsonObject1.getString("backdrop_path"));
+                                    md.setMovieLanguage(jsonObject1.getString("original_language"));
+
                                     movies.add(md);
                                 }
                                 adapter.swapData(movies);

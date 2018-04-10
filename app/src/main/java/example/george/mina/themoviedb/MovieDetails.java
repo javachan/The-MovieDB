@@ -13,6 +13,15 @@ class MovieDetails {
     private String movieBackdrop;
     private String movieVoteCount;
     private String movieId;
+    private String movieLanguage;
+
+    public String getMovieLanguage() {
+        return movieLanguage;
+    }
+
+    public void setMovieLanguage(String movieLanguage) {
+        this.movieLanguage = movieLanguage;
+    }
 
     public String getMovieBackdrop() {
         return movieBackdrop;
@@ -42,16 +51,16 @@ class MovieDetails {
         return movieImag;
     }
 
+    public void setMovieImag(String movieImag) {
+        this.movieImag = movieImag;
+    }
+
     public String getMovieOverView() {
         return movieOverView;
     }
 
     public void setMovieOverView(String movieOverView) {
         this.movieOverView = movieOverView;
-    }
-
-    public void setMovieImag(String movieImag) {
-        this.movieImag = movieImag;
     }
 
     public String getMovieTitle() {

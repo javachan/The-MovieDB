@@ -1,38 +1,36 @@
 package example.george.mina.themoviedb;
 
 
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 
 
 public class MainActivity extends AppCompatActivity {
-    FragmentTransaction ft ;
-    FragmentManager fm;
+    private FragmentTransaction ft;
+    private FragmentManager fm;
+    private String mainFragmentTAG;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        MainFragment mainFragment = new MainFragment();
+        mainFragmentTAG = MainFragment.class.getSimpleName();
         fm = getSupportFragmentManager();
         ft = fm.beginTransaction();
-        ft.addToBackStack(MainFragment.class.getSimpleName());
-        ft.replace(R.id.fragment_content, mainFragment,
-                MainFragment.class.getSimpleName()).commit();
-
+        ft.addToBackStack(mainFragmentTAG);
+        ft.replace(R.id.fragment_content, new MainFragment(), mainFragmentTAG).commit();
     }
 
     @Override
     public void onBackPressed() {
-        if (fm.findFragmentByTag(MainFragment.class.getSimpleName()).isAdded()){
+        if (fm.findFragmentByTag(mainFragmentTAG).isAdded()) {
             finish();
-        }else {
+        } else {
             super.onBackPressed();
         }
-
     }
 }
 
