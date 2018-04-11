@@ -1,4 +1,4 @@
-package example.george.mina.themoviedb;
+package example.george.mina.themoviedb.models;
 
 /**
  * Created by minageorge on 4/10/18.

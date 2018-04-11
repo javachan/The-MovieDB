@@ -31,6 +31,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import example.george.mina.themoviedb.customAdapters.MovieReviewAdapter;
+import example.george.mina.themoviedb.customAdapters.MovieTrailerAdapter;
+import example.george.mina.themoviedb.models.MovieReviewModel;
+import example.george.mina.themoviedb.tasks.VolleySingleton;
+
 /**
  * Created by minageorge on 4/9/18.
  */

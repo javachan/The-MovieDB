@@ -1,4 +1,4 @@
-package example.george.mina.themoviedb;
+package example.george.mina.themoviedb.tasks;
 
 import android.content.Context;
 

@@ -1,4 +1,4 @@
-package example.george.mina.themoviedb;
+package example.george.mina.themoviedb.customAdapters;
 
 import android.content.ActivityNotFoundException;
 import android.content.Context;
@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import example.george.mina.themoviedb.R;
 
 /**
  * Created by minageorge on 4/10/18.

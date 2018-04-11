@@ -1,4 +1,4 @@
-package example.george.mina.themoviedb;
+package example.george.mina.themoviedb.customAdapters;
 
 /**
  * Created by minageorge on 4/7/18.
@@ -21,6 +21,11 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+
+import example.george.mina.themoviedb.DetailsFragment;
+import example.george.mina.themoviedb.MainActivity;
+import example.george.mina.themoviedb.R;
+import example.george.mina.themoviedb.models.MovieDetailsModel;
 
 public class HomeMoviesAdapter extends RecyclerView.Adapter<HomeMoviesAdapter.ViewHolder> {
     private ArrayList<MovieDetailsModel> moviesItem = new ArrayList<>();

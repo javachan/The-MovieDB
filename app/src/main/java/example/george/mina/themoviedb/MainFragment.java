@@ -32,6 +32,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import example.george.mina.themoviedb.customAdapters.HomeMoviesAdapter;
+import example.george.mina.themoviedb.models.MovieDetailsModel;
+import example.george.mina.themoviedb.tasks.VolleySingleton;
+
 
 public class MainFragment extends Fragment {
     private HomeMoviesAdapter adapter;

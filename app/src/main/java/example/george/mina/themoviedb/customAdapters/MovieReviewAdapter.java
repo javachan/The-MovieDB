@@ -1,4 +1,4 @@
-package example.george.mina.themoviedb;
+package example.george.mina.themoviedb.customAdapters;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -8,6 +8,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+
+import example.george.mina.themoviedb.R;
+import example.george.mina.themoviedb.models.MovieReviewModel;
 
 /**
  * Created by minageorge on 4/11/18.

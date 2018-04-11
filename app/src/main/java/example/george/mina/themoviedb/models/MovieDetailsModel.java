@@ -1,9 +1,9 @@
-package example.george.mina.themoviedb;
+package example.george.mina.themoviedb.models;
 
 /**
  * Created by minageorge on 4/7/18.
  */
-class MovieDetailsModel {
+public class MovieDetailsModel {
     private String movieImag;
     private String movieTitle;
     private String movieDescription;
