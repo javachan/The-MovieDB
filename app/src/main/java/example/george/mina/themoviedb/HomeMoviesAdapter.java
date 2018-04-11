@@ -23,7 +23,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 
 public class HomeMoviesAdapter extends RecyclerView.Adapter<HomeMoviesAdapter.ViewHolder> {
-    private ArrayList<MovieDetails> moviesItem = new ArrayList<>();
+    private ArrayList<MovieDetailsModel> moviesItem = new ArrayList<>();
     private Context mContext;
     private GridLayoutManager gridLayoutManager = null;
     private SharedPreferences preferences;
@@ -67,9 +67,9 @@ public class HomeMoviesAdapter extends RecyclerView.Adapter<HomeMoviesAdapter.Vi
         this.gridLayoutManager = gridLayoutManager;
     }
 
-    public void swapData(ArrayList<MovieDetails> movieDetails) {
+    public void swapData(ArrayList<MovieDetailsModel> movieDetailModels) {
         moviesItem.clear();
-        moviesItem = movieDetails;
+        moviesItem = movieDetailModels;
         notifyDataSetChanged();
     }
 
@@ -100,6 +100,8 @@ public class HomeMoviesAdapter extends RecyclerView.Adapter<HomeMoviesAdapter.Vi
                     b.putString("date", moviesItem.get(pos).getMovieDate());
                     b.putString("lang", moviesItem.get(pos).getMovieLanguage());
                     b.putString("overview", moviesItem.get(pos).getMovieOverView());
+                    b.putString("id", moviesItem.get(pos).getMovieId());
+
                     DetailsFragment df = new DetailsFragment();
                     df.setArguments(b);
                     editor.putInt("span", gridLayoutManager.getSpanCount()).commit();

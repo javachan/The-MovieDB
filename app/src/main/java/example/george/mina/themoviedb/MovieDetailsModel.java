@@ -3,7 +3,7 @@ package example.george.mina.themoviedb;
 /**
  * Created by minageorge on 4/7/18.
  */
-class MovieDetails {
+class MovieDetailsModel {
     private String movieImag;
     private String movieTitle;
     private String movieDescription;
@@ -14,6 +14,7 @@ class MovieDetails {
     private String movieVoteCount;
     private String movieId;
     private String movieLanguage;
+
 
     public String getMovieLanguage() {
         return movieLanguage;

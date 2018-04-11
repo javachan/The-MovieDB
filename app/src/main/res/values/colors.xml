@@ -6,4 +6,5 @@
     <color name="colorMovieItemRec">#E3F2FD</color>
     <color name="colorBlack">#000</color>
     <color name="ColorNestedScroll">#E0E0E0</color>
+    <color name="ColorLine">#BBDEFB</color>
 </resources>

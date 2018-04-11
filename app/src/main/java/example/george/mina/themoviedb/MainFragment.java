@@ -154,9 +154,9 @@ public class MainFragment extends Fragment {
                             try {
                                 JSONObject jsonObject = new JSONObject(response);
                                 JSONArray jsonArray = jsonObject.getJSONArray("results");
-                                ArrayList<MovieDetails> movies = new ArrayList<>();
+                                ArrayList<MovieDetailsModel> movies = new ArrayList<>();
                                 for (int i = 0; i < jsonArray.length(); i++) {
-                                    MovieDetails md = new MovieDetails();
+                                    MovieDetailsModel md = new MovieDetailsModel();
                                     JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                                     md.setMovieImag(jsonObject1.getString("poster_path"));
                                     md.setMovieTitle(jsonObject1.getString("original_title"));
@@ -165,6 +165,7 @@ public class MainFragment extends Fragment {
                                     md.setMovieDate(jsonObject1.getString("release_date"));
                                     md.setMovieBackdrop(jsonObject1.getString("backdrop_path"));
                                     md.setMovieLanguage(jsonObject1.getString("original_language"));
+                                    md.setMovieId(jsonObject1.getString("id"));
 
                                     movies.add(md);
                                 }
