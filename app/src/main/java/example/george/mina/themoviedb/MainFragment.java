@@ -6,6 +6,7 @@ package example.george.mina.themoviedb;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
@@ -14,13 +15,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -40,12 +41,15 @@ import example.george.mina.themoviedb.tasks.VolleySingleton;
 
 
 public class MainFragment extends Fragment {
+    RecyclerView recyclerView;
+    Toolbar toolbar, toolbar2;
+    CollapsingToolbarLayout collapsingToolbarLayout;
+
+
     private HomeAdapter adapter;
     private GridLayoutManager layoutManager;
-    private RecyclerView recyclerView;
     private StringRequest stringRequest;
-    private Toolbar toolbar, toolbar2;
-    private CollapsingToolbarLayout collapsingToolbarLayout;
+
     private String url;
     private String TAG = MainFragment.class.getSimpleName();
     private SharedPreferences preferences;
@@ -66,13 +70,13 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_main, container, false);
-        return view;
+        return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
         recyclerView = view.findViewById(R.id.main_recycler_id);
         toolbar = getActivity().findViewById(R.id.toolbar_id);
         toolbar2 = getActivity().findViewById(R.id.toolbar_id2);
@@ -197,15 +201,14 @@ public class MainFragment extends Fragment {
                                 recyclerView.setAdapter(adapter);
                                 adapter.swapData(movies);
                             } catch (Exception e) {
-                                Log.d(TAG, e.getMessage());
-
+                                Toast.makeText(getActivity(), R.string.check_your_device_connection, Toast.LENGTH_SHORT).show();
                             }
                         }
                     },
                     new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
-                            System.out.println(error.getMessage());
+                            Toast.makeText(getActivity(), R.string.check_your_device_connection, Toast.LENGTH_SHORT).show();
                         }
                     });
             VolleySingleton.getInstance(getActivity()).addRequestQue(stringRequest);
@@ -214,9 +217,13 @@ public class MainFragment extends Fragment {
 
     public void getFavorites() {
         recyclerView.setAdapter(favoritesAdapter);
-        favoritesAdapter.setCursor(getActivity().getContentResolver().query(MovieContract.FavListEntry.CONTENT_URI
+        Cursor cursor = getActivity().getContentResolver().query(MovieContract.FavListEntry.CONTENT_URI
                 , null, null, null
-                , null));
+                , null);
+        favoritesAdapter.setCursor(cursor);
+        if (cursor.getCount() == 0) {
+            Toast.makeText(getActivity(), R.string.msg_favorit_list, Toast.LENGTH_SHORT).show();
+        }
     }
 }
 

@@ -42,8 +42,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
     @Override
     public HomeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, null);
-        return new HomeAdapter.ViewHolder(v);
+        return new HomeAdapter.ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, null));
     }
 
     @Override
@@ -59,6 +58,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             Picasso.with(mContext).load("http://image.tmdb.org/t/p/w342/" + moviesItem.get(position).getMovieImag()).into(holder.imageViewRec);
             holder.movieTitle.setText(moviesItem.get(position).getMovieTitle());
             holder.movieTitle.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/Merriweather-BlackItalic.ttf"));
+            holder.movieRate.setText(moviesItem.get(position).getMovieVote() + " / 10");
         }
         holder.itemView.setTag(position);
     }
@@ -81,7 +81,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewSqu;
         ImageView imageViewRec;
-        TextView movieTitle;
+        TextView movieTitle, movieRate;
         CardView recLayout;
         CardView squLayout;
 
@@ -90,6 +90,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             this.imageViewSqu = itemView.findViewById(R.id.img_squ);
             this.imageViewRec = itemView.findViewById(R.id.img_rec);
             this.movieTitle = itemView.findViewById(R.id.movie_title);
+            this.movieRate = itemView.findViewById(R.id.movie_ratee);
             this.recLayout = itemView.findViewById(R.id.rec_id);
             this.squLayout = itemView.findViewById(R.id.squ_id);
 

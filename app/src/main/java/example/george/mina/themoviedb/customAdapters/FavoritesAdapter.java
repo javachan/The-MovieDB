@@ -66,6 +66,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
                         myCursor.getString(myCursor.getColumnIndexOrThrow(MovieContract.FavListEntry.COL_POSTER))).into(holder.imageViewRec);
                 holder.movieTitle.setText(myCursor.getString(myCursor.getColumnIndexOrThrow(MovieContract.FavListEntry.COL_TITLE)));
                 holder.movieTitle.setTypeface(Typeface.createFromAsset(mContext.getAssets(), "fonts/Merriweather-BlackItalic.ttf"));
+                holder.movieRate.setText(myCursor.getString(myCursor.getColumnIndexOrThrow(MovieContract.FavListEntry.COL_RATE)) + " / 10");
             }
             holder.itemView.setTag(position);
         }
@@ -93,7 +94,7 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView imageViewSqu;
         ImageView imageViewRec;
-        TextView movieTitle;
+        TextView movieTitle, movieRate;
         CardView recLayout;
         CardView squLayout;
 
@@ -104,6 +105,8 @@ public class FavoritesAdapter extends RecyclerView.Adapter<FavoritesAdapter.View
             this.movieTitle = itemView.findViewById(R.id.movie_title);
             this.recLayout = itemView.findViewById(R.id.rec_id);
             this.squLayout = itemView.findViewById(R.id.squ_id);
+            this.movieRate = itemView.findViewById(R.id.movie_ratee);
+
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

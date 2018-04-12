@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -89,37 +90,7 @@ public class DetailsFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        toolbar = getActivity().findViewById(R.id.toolbar_id2);
-        toolbar2 = getActivity().findViewById(R.id.toolbar_id);
-        collapsingToolbarLayout = getActivity().findViewById(R.id.collapsing_toolbar);
-        drobackImage = getActivity().findViewById(R.id.image_backdrop);
-        posterImage = getActivity().findViewById(R.id.image_poster);
-        textViewName = getActivity().findViewById(R.id.textview_name);
-        textViewDate = getActivity().findViewById(R.id.textview_date);
-        textViewRate = getActivity().findViewById(R.id.textview_rate);
-        textViewOverView = getActivity().findViewById(R.id.textview_overview);
-        textViewLanguage = getActivity().findViewById(R.id.textview_language);
-        trailersRecyclerView = getActivity().findViewById(R.id.recycler_trailers);
-        reviewsRecyclerView = getActivity().findViewById(R.id.recycler_reviews);
-        vieww = getActivity().findViewById(R.id.fragment_details);
-        collapsingToolbarLayout.setVisibility(View.VISIBLE);
-        toolbar2.setVisibility(View.GONE);
-        toolbar.setVisibility(View.VISIBLE);
-        toolbar.setTitle("");
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        Picasso.with(getActivity()).load("http://image.tmdb.org/t/p/w342/" + posterImageLink).into(posterImage);
-        Picasso.with(getActivity()).load("http://image.tmdb.org/t/p/w342/" + backdropImageLink).into(drobackImage);
-        textViewName.setText(name);
-        textViewName.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/Merriweather-BlackItalic.ttf"));
-        textViewRate.setText(rate + " / 10");
-        textViewDate.setText(date);
-        textViewLanguage.setText(language);
-        textViewOverView.setText(overview);
-        trailersRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        trailersRecyclerView.setAdapter(trailerAdapter);
-        reviewsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
-        reviewsRecyclerView.setAdapter(reviewAdapter);
+        init();
         if (checkFavList()) {
             isInFavoriteList = true;
         }
@@ -187,7 +158,7 @@ public class DetailsFragment extends Fragment {
                 new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        System.out.println(error.getMessage());
+                        Toast.makeText(getActivity(), R.string.check_your_device_connection, Toast.LENGTH_SHORT).show();
                     }
                 });
         VolleySingleton.getInstance(getActivity()).addRequestQue(stringRequest);
@@ -271,6 +242,40 @@ public class DetailsFragment extends Fragment {
                         .appendPath(id).build(), null, null, null
                 , null);
         return cursor.getCount() == 1;
+    }
+
+    private void init() {
+        toolbar = getActivity().findViewById(R.id.toolbar_id2);
+        toolbar2 = getActivity().findViewById(R.id.toolbar_id);
+        collapsingToolbarLayout = getActivity().findViewById(R.id.collapsing_toolbar);
+        drobackImage = getActivity().findViewById(R.id.image_backdrop);
+        posterImage = getActivity().findViewById(R.id.image_poster);
+        textViewName = getActivity().findViewById(R.id.textview_name);
+        textViewDate = getActivity().findViewById(R.id.textview_date);
+        textViewRate = getActivity().findViewById(R.id.textview_rate);
+        textViewOverView = getActivity().findViewById(R.id.textview_overview);
+        textViewLanguage = getActivity().findViewById(R.id.textview_language);
+        trailersRecyclerView = getActivity().findViewById(R.id.recycler_trailers);
+        reviewsRecyclerView = getActivity().findViewById(R.id.recycler_reviews);
+        vieww = getActivity().findViewById(R.id.fragment_details);
+        collapsingToolbarLayout.setVisibility(View.VISIBLE);
+        toolbar2.setVisibility(View.GONE);
+        toolbar.setVisibility(View.VISIBLE);
+        toolbar.setTitle("");
+        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Picasso.with(getActivity()).load("http://image.tmdb.org/t/p/w342/" + posterImageLink).into(posterImage);
+        Picasso.with(getActivity()).load("http://image.tmdb.org/t/p/w342/" + backdropImageLink).into(drobackImage);
+        textViewName.setText(name);
+        textViewName.setTypeface(Typeface.createFromAsset(getActivity().getAssets(), "fonts/Merriweather-BlackItalic.ttf"));
+        textViewRate.setText(rate + " / 10");
+        textViewDate.setText(date);
+        textViewLanguage.setText(language);
+        textViewOverView.setText(overview);
+        trailersRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        trailersRecyclerView.setAdapter(trailerAdapter);
+        reviewsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
+        reviewsRecyclerView.setAdapter(reviewAdapter);
     }
 
 }
