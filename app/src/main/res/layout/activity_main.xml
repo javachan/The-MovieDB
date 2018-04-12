@@ -1,25 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<FrameLayout
-    android:id="@+id/tool"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
-    <include
 
-        layout="@layout/item_toolbar_details" />
+    <FrameLayout
+        android:id="@+id/tool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <include
+        <include
 
-        layout="@layout/item_toolbar_main" />
+            layout="@layout/item_toolbar_details" />
 
-</FrameLayout>
+        <include
+
+            layout="@layout/item_toolbar_main" />
+
+    </FrameLayout>
+
     <FrameLayout
         android:id="@+id/fragment_content"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/tool" />
+        android:layout_below="@+id/tool"
+        android:background="@color/colorPrimary" />
 
 </RelativeLayout>

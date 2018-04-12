@@ -1,9 +1,14 @@
 package example.george.mina.themoviedb;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ShareCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -33,6 +38,7 @@ import java.util.ArrayList;
 
 import example.george.mina.themoviedb.customAdapters.MovieReviewAdapter;
 import example.george.mina.themoviedb.customAdapters.MovieTrailerAdapter;
+import example.george.mina.themoviedb.data.MovieContract;
 import example.george.mina.themoviedb.models.MovieReviewModel;
 import example.george.mina.themoviedb.tasks.VolleySingleton;
 
@@ -51,6 +57,9 @@ public class DetailsFragment extends Fragment {
     private String TAG = DetailsFragment.class.getSimpleName();
     private MovieTrailerAdapter trailerAdapter;
     private MovieReviewAdapter reviewAdapter;
+    private View vieww;
+    private ContentResolver resolver = null;
+    private boolean isInFavoriteList = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -58,6 +67,7 @@ public class DetailsFragment extends Fragment {
         setHasOptionsMenu(true);
         trailerAdapter = new MovieTrailerAdapter(getActivity());
         reviewAdapter = new MovieReviewAdapter();
+        resolver = getActivity().getContentResolver();
     }
 
     @Nullable
@@ -91,6 +101,7 @@ public class DetailsFragment extends Fragment {
         textViewLanguage = getActivity().findViewById(R.id.textview_language);
         trailersRecyclerView = getActivity().findViewById(R.id.recycler_trailers);
         reviewsRecyclerView = getActivity().findViewById(R.id.recycler_reviews);
+        vieww = getActivity().findViewById(R.id.fragment_details);
         collapsingToolbarLayout.setVisibility(View.VISIBLE);
         toolbar2.setVisibility(View.GONE);
         toolbar.setVisibility(View.VISIBLE);
@@ -109,15 +120,22 @@ public class DetailsFragment extends Fragment {
         trailersRecyclerView.setAdapter(trailerAdapter);
         reviewsRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 1));
         reviewsRecyclerView.setAdapter(reviewAdapter);
+        if (checkFavList()) {
+            isInFavoriteList = true;
+        }
         getMovieTrailers();
         getMovieReviews();
-    }
 
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.menu_details, menu);
+        MenuItem menuItem = menu.findItem(R.id.action_favo);
+        if (isInFavoriteList) {
+            menuItem.setIcon(getResources().getDrawable(R.drawable.ic_favorite));
+        }
     }
 
     @Override
@@ -134,13 +152,16 @@ public class DetailsFragment extends Fragment {
                         .startChooser();
                 break;
             case R.id.action_favo:
-
+                if (isInFavoriteList) {
+                    removeFromFavList(item);
+                } else {
+                    addToFavList(item);
+                }
                 break;
 
         }
         return super.onOptionsItemSelected(item);
     }
-
 
     private void getMovieTrailers() {
         String url = "http://api.themoviedb.org/3/movie/" + id + "/videos?api_key=" + getString(R.string.api_key);
@@ -205,6 +226,51 @@ public class DetailsFragment extends Fragment {
                     }
                 });
         VolleySingleton.getInstance(getActivity()).addRequestQue(stringRequest);
+    }
+
+    private void addToFavList(MenuItem item) {
+        ContentValues values = new ContentValues();
+        values.put(MovieContract.FavListEntry.COL_ID, id);
+        values.put(MovieContract.FavListEntry.COL_POSTER, posterImageLink);
+        values.put(MovieContract.FavListEntry.COL_BACKDROP, backdropImageLink);
+        values.put(MovieContract.FavListEntry.COL_DATE, date);
+        values.put(MovieContract.FavListEntry.COL_RATE, rate);
+        values.put(MovieContract.FavListEntry.COL_OVERVIEW, overview);
+        values.put(MovieContract.FavListEntry.COL_TITLE, name);
+        values.put(MovieContract.FavListEntry.COL_LANGUAGE, language);
+        Uri uri = resolver.insert(MovieContract.BASE_CONTENT_URI, values);
+        if (uri != null) {
+            item.setIcon(getResources().getDrawable(R.drawable.ic_favorite));
+            Snackbar.make(vieww, "Added To Favorites List", Snackbar.LENGTH_SHORT).show();
+        } else {
+            Snackbar.make(vieww, "Added To Your Favorites List", Snackbar.LENGTH_SHORT).show();
+        }
+    }
+
+    private void removeFromFavList(final MenuItem item) {
+        int x = resolver.delete(MovieContract.FavListEntry.CONTENT_URI.buildUpon()
+                .appendPath(id).build(), null, null);
+        Snackbar snackbar = Snackbar.make(vieww, "Removed From Favorites List", Snackbar.LENGTH_SHORT);
+        if (x != 0) {
+
+            snackbar.setDuration(3000);
+            snackbar.setAction("Undo", new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    addToFavList(item);
+                }
+            });
+            snackbar.show();
+            item.setIcon(getResources().getDrawable(R.drawable.ic_favorite_border_white_36dp));
+            isInFavoriteList = false;
+        }
+    }
+
+    private boolean checkFavList() {
+        Cursor cursor = resolver.query(MovieContract.FavListEntry.CONTENT_URI.buildUpon()
+                        .appendPath(id).build(), null, null, null
+                , null);
+        return cursor.getCount() == 1;
     }
 
 }

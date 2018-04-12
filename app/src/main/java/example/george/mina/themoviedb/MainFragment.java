@@ -32,13 +32,15 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import example.george.mina.themoviedb.customAdapters.HomeMoviesAdapter;
+import example.george.mina.themoviedb.customAdapters.FavoritesAdapter;
+import example.george.mina.themoviedb.customAdapters.HomeAdapter;
+import example.george.mina.themoviedb.data.MovieContract;
 import example.george.mina.themoviedb.models.MovieDetailsModel;
 import example.george.mina.themoviedb.tasks.VolleySingleton;
 
 
 public class MainFragment extends Fragment {
-    private HomeMoviesAdapter adapter;
+    private HomeAdapter adapter;
     private GridLayoutManager layoutManager;
     private RecyclerView recyclerView;
     private StringRequest stringRequest;
@@ -47,13 +49,17 @@ public class MainFragment extends Fragment {
     private String url;
     private String TAG = MainFragment.class.getSimpleName();
     private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    private FavoritesAdapter favoritesAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         preferences = getActivity().getSharedPreferences("currentConfg", Context.MODE_PRIVATE);
-        adapter = new HomeMoviesAdapter(getActivity());
+        editor = preferences.edit();
+        adapter = new HomeAdapter(getActivity());
+        favoritesAdapter = new FavoritesAdapter(getActivity());
     }
 
     @Nullable
@@ -75,22 +81,33 @@ public class MainFragment extends Fragment {
         toolbar2.setVisibility(View.GONE);
         toolbar.setVisibility(View.VISIBLE);
         ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_popular_title);
         if (preferences.getInt("span", 0) == 1) {
             layoutManager = new GridLayoutManager(getActivity(), 1);
         } else {
             layoutManager = new GridLayoutManager(getActivity(), 2);
         }
         adapter.setLayoutManager(layoutManager);
+        favoritesAdapter.setLayoutManager(layoutManager);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
-        url = "http://api.themoviedb.org/3/movie/popular?api_key=" + getActivity().getString(R.string.api_key);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        getData();
+        if (preferences.getString("listContent", "null").equals("null")) {
+            url = "http://api.themoviedb.org/3/movie/popular?api_key=" + getActivity().getString(R.string.api_key);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_popular_title);
+            getData();
+        } else if (preferences.getString("listContent", "null").equals("fav")) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_fav_title);
+            getFavorites();
+
+        } else {
+            url = "http://api.themoviedb.org/3/movie/" + preferences.getString("listContent", "null") + "?api_key=" + getActivity().getString(R.string.api_key);
+            ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_rate_title);
+            getData();
+        }
+
     }
 
     @Override
@@ -108,15 +125,19 @@ public class MainFragment extends Fragment {
             case R.id.action_popular:
                 toolbar.setTitle(R.string.menu_popular_title);
                 url = "http://api.themoviedb.org/3/movie/popular?api_key=" + getActivity().getString(R.string.api_key);
+                editor.putString("listContent", "popular").commit();
                 getData();
                 break;
             case R.id.action_rate:
                 toolbar.setTitle(R.string.menu_rate_title);
                 url = "http://api.themoviedb.org/3/movie/top_rated?api_key=" + getActivity().getString(R.string.api_key);
+                editor.putString("listContent", "top_rated").commit();
                 getData();
                 break;
             case R.id.action_favo:
                 toolbar.setTitle(R.string.menu_fav_title);
+                editor.putString("listContent", "fav").commit();
+                getFavorites();
                 break;
             case R.id.action_span:
                 switchLayout();
@@ -144,9 +165,9 @@ public class MainFragment extends Fragment {
             layoutManager.setSpanCount(2); ///->>>
         } else {
             layoutManager.setSpanCount(1);
-            Log.d("dddd", "1222");
         }
         adapter.notifyDataSetChanged();
+        favoritesAdapter.notifyDataSetChanged();
     }
 
     public void getData() {
@@ -173,6 +194,7 @@ public class MainFragment extends Fragment {
 
                                     movies.add(md);
                                 }
+                                recyclerView.setAdapter(adapter);
                                 adapter.swapData(movies);
                             } catch (Exception e) {
                                 Log.d(TAG, e.getMessage());
@@ -188,6 +210,13 @@ public class MainFragment extends Fragment {
                     });
             VolleySingleton.getInstance(getActivity()).addRequestQue(stringRequest);
         }
+    }
+
+    public void getFavorites() {
+        recyclerView.setAdapter(favoritesAdapter);
+        favoritesAdapter.setCursor(getActivity().getContentResolver().query(MovieContract.FavListEntry.CONTENT_URI
+                , null, null, null
+                , null));
     }
 }
 

@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorMovieItemRec"
         android:orientation="horizontal">
 
@@ -22,8 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/item_movie_rec_text_margin"
-            android:textColor="@color/colorBlack"
             android:text="the default text "
+            android:textColor="@color/colorBlack"
             android:textSize="@dimen/item_movie_rec_text_size"
             android:textStyle="bold" />
     </LinearLayout>

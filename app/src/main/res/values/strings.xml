@@ -13,4 +13,5 @@
     <string name="menu_fav_title">Favorites</string>
     <string name="menu_rate_title">Top rated</string>
     <string name="menu_popular_title">Most popular</string>
+    <string name="check_your_device_connection">check your device connection</string>
 </resources>

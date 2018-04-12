@@ -39,7 +39,7 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
     @Override
     public void onBindViewHolder(@NonNull MovieTrailerAdapter.ViewHolder holder, int position) {
         holder.itemView.setTag(position);
-        holder.trailerTitle.setText("Trailers " + String.valueOf(position + 1));
+        holder.trailerTitle.setText("Trailer " + String.valueOf(position + 1));
     }
 
     @Override

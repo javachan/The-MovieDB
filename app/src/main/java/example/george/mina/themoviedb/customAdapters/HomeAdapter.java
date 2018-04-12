@@ -27,27 +27,27 @@ import example.george.mina.themoviedb.MainActivity;
 import example.george.mina.themoviedb.R;
 import example.george.mina.themoviedb.models.MovieDetailsModel;
 
-public class HomeMoviesAdapter extends RecyclerView.Adapter<HomeMoviesAdapter.ViewHolder> {
+public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private ArrayList<MovieDetailsModel> moviesItem = new ArrayList<>();
     private Context mContext;
     private GridLayoutManager gridLayoutManager = null;
     private SharedPreferences preferences;
     private SharedPreferences.Editor editor;
 
-    public HomeMoviesAdapter(Context context) {
+    public HomeAdapter(Context context) {
         this.mContext = context;
         this.preferences = mContext.getSharedPreferences("currentConfg", Context.MODE_PRIVATE);
         this.editor = preferences.edit();
     }
 
     @Override
-    public HomeMoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public HomeAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_movie, null);
-        return new HomeMoviesAdapter.ViewHolder(v);
+        return new HomeAdapter.ViewHolder(v);
     }
 
     @Override
-    public void onBindViewHolder(HomeMoviesAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(HomeAdapter.ViewHolder holder, int position) {
         int spanCount = gridLayoutManager.getSpanCount();
         if (spanCount > 1) {
             holder.recLayout.setVisibility(View.GONE);
