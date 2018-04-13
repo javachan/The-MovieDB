@@ -125,8 +125,10 @@ public class DetailsFragment extends Fragment {
             case R.id.action_favo:
                 if (isInFavoriteList) {
                     removeFromFavList(item);
+                    isInFavoriteList = false;
                 } else {
                     addToFavList(item);
+                    isInFavoriteList = true;
                 }
                 break;
 
@@ -229,6 +231,7 @@ public class DetailsFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     addToFavList(item);
+                    isInFavoriteList = true;
                 }
             });
             snackbar.show();
