@@ -4,7 +4,7 @@
 
 - you can use it by replace " USE UR KEY " by your new API KEY in strings.xml file 
     
-- create your api key from here [themoviedb] (https://api.themoviedb.org).
+- create your api key from here  (https://api.themoviedb.org).
 
 ## Screenshots
 
