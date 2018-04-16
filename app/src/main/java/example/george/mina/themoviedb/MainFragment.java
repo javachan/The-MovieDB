@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -42,10 +41,7 @@ import example.george.mina.themoviedb.tasks.VolleySingleton;
 
 public class MainFragment extends Fragment {
     RecyclerView recyclerView;
-    Toolbar toolbar, toolbar2;
-    CollapsingToolbarLayout collapsingToolbarLayout;
-
-
+    Toolbar toolbar;
     private HomeAdapter adapter;
     private GridLayoutManager layoutManager;
     private StringRequest stringRequest;
@@ -56,6 +52,7 @@ public class MainFragment extends Fragment {
     private SharedPreferences.Editor editor;
     private FavoritesAdapter favoritesAdapter;
 
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,27 +61,22 @@ public class MainFragment extends Fragment {
         editor = preferences.edit();
         adapter = new HomeAdapter(getActivity());
         favoritesAdapter = new FavoritesAdapter(getActivity());
+
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
+
         return inflater.inflate(R.layout.fragment_main, container, false);
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         recyclerView = view.findViewById(R.id.main_recycler_id);
-        toolbar = getActivity().findViewById(R.id.toolbar_id);
-        toolbar2 = getActivity().findViewById(R.id.toolbar_id2);
-        collapsingToolbarLayout = getActivity().findViewById(R.id.collapsing_toolbar);
-        collapsingToolbarLayout.setVisibility(View.GONE);
-        toolbar2.setVisibility(View.GONE);
-        toolbar.setVisibility(View.VISIBLE);
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(false);
         if (preferences.getInt("span", 0) == 1) {
             layoutManager = new GridLayoutManager(getActivity(), 1);
         } else {
@@ -98,14 +90,15 @@ public class MainFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
         if (preferences.getString("listContent", "null").equals("null")) {
             url = "http://api.themoviedb.org/3/movie/popular?api_key=" + getActivity().getString(R.string.api_key);
+
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_popular_title);
             getData();
         } else if (preferences.getString("listContent", "null").equals("fav")) {
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_fav_title);
             getFavorites();
-
         } else {
             url = "http://api.themoviedb.org/3/movie/" + preferences.getString("listContent", "null") + "?api_key=" + getActivity().getString(R.string.api_key);
             ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_rate_title);
@@ -117,9 +110,11 @@ public class MainFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
+
         inflater.inflate(R.menu.menu_main, menu);
         if (preferences.getInt("span", 0) == 1) {
             switchIcon(menu.findItem(R.id.action_span));
+
         }
     }
 
@@ -127,19 +122,19 @@ public class MainFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_popular:
-                toolbar.setTitle(R.string.menu_popular_title);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_popular_title);
                 url = "http://api.themoviedb.org/3/movie/popular?api_key=" + getActivity().getString(R.string.api_key);
                 editor.putString("listContent", "popular").commit();
                 getData();
                 break;
             case R.id.action_rate:
-                toolbar.setTitle(R.string.menu_rate_title);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_rate_title);
                 url = "http://api.themoviedb.org/3/movie/top_rated?api_key=" + getActivity().getString(R.string.api_key);
                 editor.putString("listContent", "top_rated").commit();
                 getData();
                 break;
             case R.id.action_favo:
-                toolbar.setTitle(R.string.menu_fav_title);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.menu_fav_title);
                 editor.putString("listContent", "fav").commit();
                 getFavorites();
                 break;
@@ -148,7 +143,7 @@ public class MainFragment extends Fragment {
                 switchIcon(item);
                 break;
             default:
-                toolbar.setTitle(R.string.app_name);
+                ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.app_name);
                 break;
         }
         return super.onOptionsItemSelected(item);

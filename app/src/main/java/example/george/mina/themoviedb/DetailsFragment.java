@@ -86,7 +86,6 @@ public class DetailsFragment extends Fragment {
         id = getArguments().getString("id");
         return view;
     }
-
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -248,9 +247,7 @@ public class DetailsFragment extends Fragment {
     }
 
     private void init() {
-        toolbar = getActivity().findViewById(R.id.toolbar_id2);
-        toolbar2 = getActivity().findViewById(R.id.toolbar_id);
-        collapsingToolbarLayout = getActivity().findViewById(R.id.collapsing_toolbar);
+
         drobackImage = getActivity().findViewById(R.id.image_backdrop);
         posterImage = getActivity().findViewById(R.id.image_poster);
         textViewName = getActivity().findViewById(R.id.textview_name);
@@ -261,11 +258,7 @@ public class DetailsFragment extends Fragment {
         trailersRecyclerView = getActivity().findViewById(R.id.recycler_trailers);
         reviewsRecyclerView = getActivity().findViewById(R.id.recycler_reviews);
         vieww = getActivity().findViewById(R.id.fragment_details);
-        collapsingToolbarLayout.setVisibility(View.VISIBLE);
-        toolbar2.setVisibility(View.GONE);
-        toolbar.setVisibility(View.VISIBLE);
-        toolbar.setTitle("");
-        ((AppCompatActivity) getActivity()).setSupportActionBar(toolbar);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("");
         ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         Picasso.with(getActivity()).load("http://image.tmdb.org/t/p/w342/" + posterImageLink).into(posterImage);
         Picasso.with(getActivity()).load("http://image.tmdb.org/t/p/w342/" + backdropImageLink).into(drobackImage);

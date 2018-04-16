@@ -30,7 +30,7 @@ public class MovieReviewAdapter extends RecyclerView.Adapter<MovieReviewAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull MovieReviewAdapter.ViewHolder holder, int position) {
-        holder.author.setText("- " + reviews.get(position).getAuthor());
+        holder.author.setText(reviews.get(position).getAuthor());
         holder.content.setText(reviews.get(position).getContent());
 
     }

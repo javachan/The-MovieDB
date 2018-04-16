@@ -38,6 +38,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         this.mContext = context;
         this.preferences = mContext.getSharedPreferences("currentConfg", Context.MODE_PRIVATE);
         this.editor = preferences.edit();
+
     }
 
     @Override
@@ -121,5 +122,6 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
         }
     }
+
 
 }

@@ -9,7 +9,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -40,6 +43,9 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
     public void onBindViewHolder(@NonNull MovieTrailerAdapter.ViewHolder holder, int position) {
         holder.itemView.setTag(position);
         holder.trailerTitle.setText("Trailer " + String.valueOf(position + 1));
+
+        Picasso.with(context).load("https://img.youtube.com/vi/" + trailers.get(position) + "/default.jpg").into(holder.videoImage);
+
     }
 
     @Override
@@ -56,9 +62,10 @@ public class MovieTrailerAdapter extends RecyclerView.Adapter<MovieTrailerAdapte
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         TextView trailerTitle;
-
+        ImageView videoImage;
         public ViewHolder(View itemView) {
             super(itemView);
+            this.videoImage = itemView.findViewById(R.id.image_video_thm);
             this.trailerTitle = itemView.findViewById(R.id.textView_trailer);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
